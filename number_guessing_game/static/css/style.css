@@ -1,0 +1,164 @@
+/* Reset default margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #acb6e5); /* Gradient background from image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+.game-container {
+    background: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+    padding: 30px;
+    border-radius: 20px; /* Larger radius for pill shape */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    width: 400px; /* Slightly narrower for better balance */
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.game-container:hover {
+    transform: scale(1.02); /* Slight hover effect */
+}
+
+h1 {
+    color: #2c3e50; /* Dark blue-gray for title */
+    font-size: 2.5em; /* Larger title */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.stats {
+    color: #7f8c8d; /* Gray text for stats */
+    font-size: 14px;
+    background: #f5f6fa; /* Light gray background */
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+#message {
+    color: #34495e; /* Dark teal for message */
+    font-size: 16px;
+    margin: 15px 0;
+    min-height: 20px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+#message.win {
+    color: #27ae60; /* Green for win */
+    animation: pulse 1s infinite;
+}
+
+.input-area {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column; /* Stack vertically for better control */
+    gap: 15px; /* Consistent spacing between elements */
+    align-items: center;
+}
+
+select, input[type="number"], button {
+    padding: 12px; /* Uniform padding */
+    width: 100%; /* Full width for symmetry */
+    max-width: 300px; /* Limit width for readability */
+    border: 2px solid #bdc3c7; /* Light gray border */
+    border-radius: 10px; /* Larger radius for pill shape */
+    font-size: 16px;
+    transition: border-color 0.3s ease, background 0.3s ease, transform 0.2s ease;
+}
+
+select {
+    background-color: #fff;
+    cursor: pointer;
+    appearance: none; /* Remove default arrow */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%237f8c8d" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
+
+input[type="number"] {
+    background-color: #fff;
+    text-align: center; /* Center text in number input */
+}
+
+button {
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button[type="submit"], button[onclick="makeGuess()"] {
+    background: #e74c3c; /* Red for Guess button */
+}
+
+button[onclick="startGame()"] {
+    background: #e74c3c; /* Red for Start button */
+}
+
+button[onclick="getHint()"] {
+    background: #3498db; /* Blue for Hint button */
+}
+
+button:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    filter: brightness(90%); /* Darken on hover */
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+select:focus, input[type="number"]:focus {
+    border-color: #3498db; /* Blue on focus */
+    outline: none;
+}
+
+#guess-list {
+    max-height: 120px;
+    overflow-y: auto;
+    margin-top: 20px;
+    padding: 10px;
+    background: #f9f9f9; /* Light gray for guess list */
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: left;
+}
+
+#guess-list div {
+    padding: 5px 0;
+    transition: opacity 0.5s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+#guess-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+#guess-list::-webkit-scrollbar-thumb {
+    background: #95a5a6;
+    border-radius: 4px;
+}
+
+#guess-list::-webkit-scrollbar-thumb:hover {
+    background: #7f8c8d;
+}

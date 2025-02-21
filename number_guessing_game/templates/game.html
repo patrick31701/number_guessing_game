@@ -1,0 +1,84 @@
+<html><head>
+    <title>Advanced Number Guessing Game</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="game-container">
+    <h1>Guess the Number</h1>
+    <div class="stats">
+        Attempts: <span id="attempts">0</span> |
+        Score: <span id="score">1000</span> |
+        Range: <span id="range">1-100</span>
+    </div>
+    <div id="message">Select difficulty to start!</div>
+    <div class="input-area">
+        <select id="difficulty">
+            <option value="easy">Easy (1-50)</option>
+            <option value="medium" selected="">Medium (1-100)</option>
+            <option value="hard">Hard (1-200)</option>
+        </select>
+        <button onclick="startGame()">Start</button>
+        <br>
+        <input type="number" id="guess" placeholder="Your guess">
+        <button onclick="makeGuess()">Guess</button>
+        <button id="hint-btn" onclick="getHint()">Hint (-100 points)</button>
+    </div>
+    <div id="guess-list"></div>
+</div>
+
+<script>
+    async function startGame() {
+        const difficulty = document.getElementById('difficulty').value;
+        const response = await fetch('/start', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `difficulty=${difficulty}`
+        });
+        const data = await response.json();
+        updateDisplay(data);
+        document.getElementById('attempts').textContent = '0';
+        document.getElementById('score').textContent = '1000';
+        document.getElementById('guess-list').innerHTML = '';
+    }
+
+    async function makeGuess() {
+        const guess = document.getElementById('guess').value;
+        const response = await fetch('/guess', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `guess=${guess}`
+        });
+        const data = await response.json();
+        updateDisplay(data);
+        if (data.result !== 'error') {
+            document.getElementById('attempts').textContent = parseInt(document.getElementById('attempts').textContent) + 1;
+            document.getElementById('score').textContent = data.score || parseInt(document.getElementById('score').textContent) - 20;
+            addGuess(guess, data.result);
+        }
+        document.getElementById('guess').value = '';
+    }
+
+    async function getHint() {
+        const response = await fetch('/hint', { method: 'POST' });
+        const data = await response.json();
+        document.getElementById('message').textContent = data.hint;
+        document.getElementById('score').textContent = parseInt(document.getElementById('score').textContent) - 100;
+    }
+
+    function updateDisplay(data) {
+        document.getElementById('message').textContent = data.message;
+        if (data.range) {
+            document.getElementById('range').textContent = `${data.range[0]}-${data.range[1]}`;
+        }
+    }
+
+    function addGuess(guess, result) {
+        const list = document.getElementById('guess-list');
+        const item = document.createElement('div');
+        item.textContent = `Guess: ${guess} (${result === 'high' ? 'Too High' : result === 'low' ? 'Too Low' : 'Correct'})`;
+        item.style.color = result === 'win' ? 'green' : result === 'high' ? 'red' : 'blue';
+        list.insertBefore(item, list.firstChild);
+    }
+</script>
+
+</body></html>
